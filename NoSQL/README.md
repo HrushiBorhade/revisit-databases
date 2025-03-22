@@ -194,3 +194,24 @@ adoption> db.pets.find().sort({age: -1}).limit(2)
   }
 ]
 ```
+- Projections
+```
+adoption> db.pets.find({type:"dog"}, {name:1}).limit(5)
+[
+  { _id: ObjectId('67de3f2674b98dd823fc0422'), name: 'Luna' },
+  { _id: ObjectId('67de3f7774b98dd823fc0423'), name: 'Luna' },
+  { _id: ObjectId('67de3f7774b98dd823fc0427'), name: 'Spot' },
+  { _id: ObjectId('67de3f7774b98dd823fc042b'), name: 'Zero' },
+  { _id: ObjectId('67de3f7774b98dd823fc042f'), name: 'Carina' }
+]
+```
+```
+adoption> db.pets.find({type:"dog"}, {name:true, breed:true, _id:false}).limit(5)
+[
+  { name: 'Luna', breed: 'Havanese' },
+  { name: 'Luna', breed: 'Havanese' },
+  { name: 'Spot', breed: 'African Gray' },
+  { name: 'Zero', breed: 'Bichon Frise' },
+  { name: 'Carina', breed: 'Tabby' }
+]
+```
