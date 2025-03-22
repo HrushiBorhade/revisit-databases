@@ -168,3 +168,29 @@ no cursor
 adoption> db.pets.count({type:"dog", age: {$gt : 10}})
 1110
 ```
+- logical operators
+```  
+adoption> db.pets.count({type:"dog", $and:[{age:{$gte:4}},{age:{$lte:10}}]})
+835
+```
+```
+adoption> db.pets.find().sort({age: -1}).limit(2)
+[
+  {
+    _id: ObjectId('67de3f7774b98dd823fc0446'),
+    name: 'Zero',
+    type: 'reptile',
+    age: 18,
+    breed: 'Havanese',
+    index: 35
+  },
+  {
+    _id: ObjectId('67de3f7774b98dd823fc0434'),
+    name: 'Zero',
+    type: 'cat',
+    age: 18,
+    breed: 'Cockatoo',
+    index: 17
+  }
+]
+```
