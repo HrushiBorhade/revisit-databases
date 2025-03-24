@@ -263,3 +263,121 @@ adoption> db.pets.findOneAndDelete({name:"Fido"})
   index: 1
 }
 ```
+
+- Indexing
+```
+adoption> db.pets.createIndex({name:1})
+name_1
+```
+```
+adoption> db.pets.find({name:"Fluffy"}).explain("executionStats")
+{
+  explainVersion: '1',
+  queryPlanner: {
+    namespace: 'adoption.pets',
+    parsedQuery: { name: { '$eq': 'Fluffy' } },
+    indexFilterSet: false,
+    planCacheShapeHash: '544F3E5C',
+    planCacheKey: 'EEE0759C',
+    optimizationTimeMillis: 0,
+    maxIndexedOrSolutionsReached: false,
+    maxIndexedAndSolutionsReached: false,
+    maxScansToExplodeReached: false,
+    prunedSimilarIndexes: false,
+    winningPlan: {
+      isCached: false,
+      stage: 'FETCH',
+      inputStage: {
+        stage: 'IXSCAN',
+        keyPattern: { name: 1 },
+        indexName: 'name_1',
+        isMultiKey: false,
+        multiKeyPaths: { name: [] },
+        isUnique: false,
+        isSparse: false,
+        isPartial: false,
+        indexVersion: 2,
+        direction: 'forward',
+        indexBounds: { name: [ '["Fluffy", "Fluffy"]' ] }
+      }
+    },
+    rejectedPlans: []
+  },
+  executionStats: {
+    executionSuccess: true,
+    nReturned: 1071,
+    executionTimeMillis: 6,
+    totalKeysExamined: 1071,
+    totalDocsExamined: 1071,
+    executionStages: {
+      isCached: false,
+      stage: 'FETCH',
+      nReturned: 1071,
+      executionTimeMillisEstimate: 4,
+      works: 1072,
+      advanced: 1071,
+      needTime: 0,
+      needYield: 0,
+      saveState: 0,
+      restoreState: 0,
+      isEOF: 1,
+      docsExamined: 1071,
+      alreadyHasObj: 0,
+      inputStage: {
+        stage: 'IXSCAN',
+        nReturned: 1071,
+        executionTimeMillisEstimate: 4,
+        works: 1072,
+        advanced: 1071,
+        needTime: 0,
+        needYield: 0,
+        saveState: 0,
+        restoreState: 0,
+        isEOF: 1,
+        keyPattern: { name: 1 },
+        indexName: 'name_1',
+        isMultiKey: false,
+        multiKeyPaths: { name: [] },
+        isUnique: false,
+        isSparse: false,
+        isPartial: false,
+        indexVersion: 2,
+        direction: 'forward',
+        indexBounds: { name: [ '["Fluffy", "Fluffy"]' ] },
+        keysExamined: 1071,
+        seeks: 1,
+        dupsTested: 0,
+        dupsDropped: 0
+      }
+    }
+  },
+  queryShapeHash: 'E9D342F4EBE690C2A2A85458850DD2861E11652EB849BFB8EA8D8B8FAB49B7E6',
+  command: { find: 'pets', filter: { name: 'Fluffy' }, '$db': 'adoption' },
+  serverInfo: {
+    host: 'eb3a0172e28b',
+    port: 27017,
+    version: '8.0.4',
+    gitVersion: 'bc35ab4305d9920d9d0491c1c9ef9b72383d31f9'
+  },
+  serverParameters: {
+    internalQueryFacetBufferSizeBytes: 104857600,
+    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+    internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+    internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+    internalQueryProhibitBlockingMergeOnMongoS: 0,
+    internalQueryMaxAddToSetBytes: 104857600,
+    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
+    internalQueryFrameworkControl: 'trySbeRestricted',
+    internalQueryPlannerIgnoreIndexWithCollationForRegex: 1
+  },
+  ok: 1
+}
+```
+```
+adoption>   db.pets.createIndex({index:1}, {unique:true})
+index_1
+adoption> db.pets.insertOne({name:"tuffy",index:10})
+MongoServerError: E11000 duplicate key error collection: adoption.pets index: index_1 dup key: { index: 10 }
+```
+
