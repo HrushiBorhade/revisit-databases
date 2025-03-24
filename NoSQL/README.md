@@ -247,4 +247,19 @@ adoption> db.pets.updateOne(
   }
 );
 ```
-
+- Delete
+```
+adoption> db.pets.deleteMany({type:"reptile", breed:"Havanese"})
+{ acknowledged: true, deletedCount: 357 }
+```
+```
+adoption> db.pets.findOneAndDelete({name:"Fido"})
+{
+  _id: ObjectId('67de3f7774b98dd823fc0424'),
+  name: 'Fido',
+  type: 'cat',
+  age: 2,
+  breed: 'Bichon Frise',
+  index: 1
+}
+```
