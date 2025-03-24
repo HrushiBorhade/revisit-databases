@@ -431,3 +431,80 @@ adoption> db.pets.find({$text: {$search: "dog havanese luna"}},{score:{$meta:"te
   }
 ]
 ```
+
+- Aggregation
+```
+adoption> db.pets.aggregate([
+...   {
+...     $bucket: {
+...       groupBy: "$age",
+...       boundaries: [0, 3, 9, 15],
+...       default: "very senior",
+...       output: {
+...         count: { $sum: 1 },
+...       },
+...     },
+...   },
+... ]);
+[
+  { _id: 0, count: 1071 },
+  { _id: 3, count: 3218 },
+  { _id: 9, count: 3214 },
+  { _id: 'very senior', count: 2141 }
+]
+```
+```
+adoption> db.pets.aggregate([
+...   {
+...     $match: {
+...       type: "dog",
+...     },
+...   },
+...   {
+...     $bucket: {
+...       groupBy: "$age",
+...       boundaries: [0, 3, 9, 15],
+...       default: "very senior",
+...       output: {
+...         count: { $sum: 1 },
+...       },
+...     },
+...   },
+... ]);
+[
+  { _id: 0, count: 278 },
+  { _id: 3, count: 835 },
+  { _id: 9, count: 834 },
+  { _id: 'very senior', count: 555 }
+]
+```
+```
+adoption> db.pets.aggregate([
+...   {
+...     $match: {
+...       type: "dog",
+...     },
+...   },
+...   {
+...     $bucket: {
+...       groupBy: "$age",
+...       boundaries: [0, 3, 9, 15],
+...       default: "very senior",
+...       output: {
+...         count: { $sum: 1 },
+...       },
+...     },
+...   },
+...   {
+...     $sort: {
+...       count: -1,
+...     },
+...   },
+... ]);
+[
+  { _id: 3, count: 835 },
+  { _id: 9, count: 834 },
+  { _id: 'very senior', count: 555 },
+  { _id: 0, count: 278 }
+]
+```
