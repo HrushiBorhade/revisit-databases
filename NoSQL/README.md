@@ -215,3 +215,36 @@ adoption> db.pets.find({type:"dog"}, {name:true, breed:true, _id:false}).limit(5
   { name: 'Carina', breed: 'Tabby' }
 ]
 ```
+- Updating
+```
+adoption> db.pets.updateMany({ type: "dog" }, { $inc: { age: 1 } });
+```
+```
+adoption> db.pets.updateOne(
+  { type: "dog", name: "Luna", breed: "Havanese" },
+  { $set: { owner: "Hrushi" } }
+);
+```
+```
+adoption> db.pets.updateOne(
+  {
+    type: "dog",
+    name: "Sudo",
+    breed: "Wheaten",
+  },
+  {
+    $set: {
+      type: "dog",
+      name: "Sudo",
+      breed: "Wheaten",
+      age: 5,
+      index: 10000,
+      owner: "Sarah Drasner",
+    },
+  },
+  {
+    upsert: true,
+  }
+);
+```
+
