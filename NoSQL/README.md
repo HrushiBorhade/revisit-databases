@@ -381,3 +381,53 @@ adoption> db.pets.insertOne({name:"tuffy",index:10})
 MongoServerError: E11000 duplicate key error collection: adoption.pets index: index_1 dup key: { index: 10 }
 ```
 
+- Text Search Index
+```
+adoption> db.pets.createIndex({type:"text",breed:"text",name:"text"});
+type_text_breed_text_name_text
+```
+```
+adoption> db.pets.find({$text: {$search: "dog havanese luna"}}).limit(2)
+[
+  {
+    _id: ObjectId('67e0bde8bcc7cb13a7560f9f'),
+    breed: 'Wheaten',
+    type: 'dog',
+    name: 'Sudo',
+    age: 5,
+    index: 10000,
+    owner: 'Sarah Drasner'
+  },
+  {
+    _id: ObjectId('67de3f7774b98dd823fc2b2f'),
+    name: 'Baxter',
+    type: 'dog',
+    age: 8,
+    breed: 'Havanese',
+    index: 9996
+  }
+]
+```
+```
+adoption> db.pets.find({$text: {$search: "dog havanese luna"}},{score:{$meta:"textScore"}}).sort({score:{$meta:"textScore"}}).limit(2)
+[
+  {
+    _id: ObjectId('67de3f7774b98dd823fc1cbf'),
+    name: 'Luna',
+    type: 'dog',
+    age: 2,
+    breed: 'Havanese',
+    index: 6300,
+    score: 3.2
+  },
+  {
+    _id: ObjectId('67de3f7774b98dd823fc18cf'),
+    name: 'Luna',
+    type: 'dog',
+    age: 2,
+    breed: 'Havanese',
+    index: 5292,
+    score: 3.2
+  }
+]
+```
