@@ -17,3 +17,21 @@ CREATE DATABASE
 postgres=# \c message_boards;
 You are now connected to database "message_boards" as user "postgres".
 ```
+
+- some psql commands
+```
+-- see all databases
+\l
+
+-- see all tables in this database, probably won't see anything
+\d
+
+-- see all available commands
+\?
+
+-- see available queries
+\h
+
+-- run a shell command
+\! ls && echo "hi from shell!"
+```
