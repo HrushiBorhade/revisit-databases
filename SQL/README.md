@@ -175,3 +175,38 @@ message_boards=# SELECT username, email, created_on FROM users ORDER BY created_
  asandiland9 | asandiland9@sun.com             | 2025-03-07 02:49:39.980287
 (10 rows)
 ```
+- Count
+```
+message_boards=# SELECT COUNT(*) FROM users;
+ count
+-------
+  1000
+(1 row)
+
+message_boards=# SELECT COUNT(last_login) FROM users;
+ count
+-------
+   678
+(1 row)
+```
+
+- Update
+```
+message_boards=# UPDATE users SET username='hrushi18' WHERE user_id=1 RETURNING *;
+ user_id | username |          email           |   full_name    | last_login |         created_on
+---------+----------+--------------------------+----------------+------------+----------------------------
+       1 | hrushi18 | dpuckring0@wikimedia.org | Dicky Puckring |            | 2025-03-18 02:49:39.980287
+(1 row)
+
+UPDATE 1
+```
+- Delete
+```
+message_boards=# DELETE FROM users WHERE user_id = 999 RETURNING *;
+ user_id |  username  |        email         |   full_name    |         last_login         |         created_on
+---------+------------+----------------------+----------------+----------------------------+----------------------------
+     999 | ncuttellrr | ncuttellrr@unblog.fr | Nicole Cuttell | 2024-03-22 02:49:39.980287 | 2024-03-22 02:49:39.980287
+(1 row)
+
+DELETE 1
+```
