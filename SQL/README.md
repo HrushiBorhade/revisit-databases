@@ -425,3 +425,75 @@ ORDER BY
  Object-based            |             9
 :
 ```
+
+- JSONB
+
+Sometimes you have data that just doesn't have a nice schema to it. If you tried to fit it into a table database like PostgreSQL, you would end having very generic field names that would have to be interprepted by code or you'd end up with multiple tables to be able describe different schemas. This is one place where document based databases like MongoDB really shine; their schemaless database works really well in these situations.
+
+However PostgreSQL has a magic superpower here: the JSONB data type. This allows you to put JSONB objects into a column and then you can use SQL to query those objects.
+
+```
+message_boards=# CREATE TABLE rich_content (
+  content_id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  comment_id INT REFERENCES comments(comment_id) ON DELETE CASCADE,
+  content JSONB NOT NULL
+);
+```
+
+```
+message_boards=# SELECT content -> 'type' FROM rich_content;
+ ?column?
+----------
+ "poll"
+ "video"
+ "poll"
+ "image"
+ "image"
+(5 rows)
+```
+
+```
+message_boards=# SELECT DISTINCT content -> 'type' FROM rich_content;
+ ?column?
+----------
+ "image"
+ "poll"
+ "video"
+(3 rows)
+```
+
+```
+message_boards=# SELECT DISTINCT content ->> 'type' FROM rich_content;
+ ?column?
+----------
+ video
+ poll
+ image
+(3 rows)
+```
+
+```
+message_boards=# SELECT content ->> 'type' as content_type, comment_id FROM rich_content WHERE content ->> 'type' = 'poll';
+ content_type | comment_id
+--------------+------------
+ poll         |         63
+ poll         |        358
+(2 rows)
+```
+
+```
+message_boards=# SELECT
+  content -> 'dimensions' ->> 'height' AS height,
+  content -> 'dimensions' ->> 'width' AS width,
+  comment_id
+FROM
+  rich_content
+WHERE
+  content -> 'dimensions' IS NOT NULL;
+ height | width | comment_id
+--------+-------+------------
+ 1080   | 1920  |        358
+ 400    | 1084  |        410
+ 237    | 3301  |        485
+(3 rows)
+```
