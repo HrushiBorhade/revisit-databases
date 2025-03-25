@@ -102,3 +102,76 @@ message_boards=# SELECT username, user_id FROM users LIMIT 15;
 (15 rows)
 ```
 
+- Where
+```
+message_boards=# SELECT username, user_id FROM users WHERE last_login IS NULL LIMIT 15;
+   username    | user_id
+---------------+---------
+ dpuckring0    |       1
+ gsomerled2    |       3
+ sfaiera       |      11
+ gsukbhansd    |      14
+ aaizikovj     |      20
+ hmaccurtaink  |      21
+ gromaynep     |      26
+ fbodicumu     |      31
+ wcurwoodv     |      32
+ gcloneyy      |      35
+ rlorenzetti11 |      38
+ ldykes12      |      39
+ msimonich13   |      40
+ klicciardo14  |      41
+ fcaldwall17   |      44
+(15 rows)
+```
+
+- AND and maths
+```
+message_boards=# SELECT username, email, user_id, created_on FROM users WHERE last_login IS NULL AND created_on < NOW() - interval '6 months'  LIMIT 10;
+  username   |         email          | user_id |         created_on
+-------------+------------------------+---------+----------------------------
+ ggodboltfl  | ggodboltfl@hc360.com   |     562 | 2024-09-17 02:49:39.980287
+ gplankfp    | gplankfp@google.nl     |     566 | 2024-09-17 02:49:39.980287
+ gturlefs    | gturlefs@nsw.gov.au    |     569 | 2024-09-17 02:49:39.980287
+ aordemannfx | aordemannfx@i2i.jp     |     574 | 2024-09-17 02:49:39.980287
+ taldisfz    | taldisfz@ameblo.jp     |     576 | 2024-09-17 02:49:39.980287
+ cwayong2    | cwayong2@biglobe.ne.jp |     579 | 2024-09-17 02:49:39.980287
+ yraittg3    | yraittg3@msu.edu       |     580 | 2024-09-17 02:49:39.980287
+ dbyrthg4    | dbyrthg4@sakura.ne.jp  |     581 | 2024-09-17 02:49:39.980287
+ cmorsheadg5 | cmorsheadg5@go.com     |     582 | 2024-09-17 02:49:39.980287
+ dkoppensg7  | dkoppensg7@globo.com   |     584 | 2024-09-17 02:49:39.980287
+(10 rows)
+```
+
+- ORDER
+```
+message_boards=# SELECT username, email, created_on FROM users ORDER BY created_on LIMIT 10;
+   username   |            email            |         created_on
+--------------+-----------------------------+----------------------------
+ edepp        | edepp@360.cn                | 2024-03-22 02:49:39.980287
+ saspinps     | saspinps@wired.com          | 2024-03-22 02:49:39.980287
+ kdohertypm   | kdohertypm@mayoclinic.com   | 2024-03-22 02:49:39.980287
+ hderrickpo   | hderrickpo@wsj.com          | 2024-03-22 02:49:39.980287
+ jsappypq     | jsappypq@sciencedaily.com   | 2024-03-22 02:49:39.980287
+ cmottepr     | cmottepr@bbc.co.uk          | 2024-03-22 02:49:39.980287
+ akarlemanpk  | akarlemanpk@blogs.com       | 2024-03-22 02:49:39.980287
+ gtivolierpl  | gtivolierpl@istockphoto.com | 2024-03-22 02:49:39.980287
+ vwindridgepn | vwindridgepn@umn.edu        | 2024-03-22 02:49:39.980287
+ bbrookespt   | bbrookespt@skyrock.com      | 2024-03-22 02:49:39.980287
+(10 rows)
+
+message_boards=# SELECT username, email, created_on FROM users ORDER BY created_on DESC LIMIT 10;
+  username   |              email              |         created_on
+-------------+---------------------------------+----------------------------
+ ssiviour1   | ssiviour1@ow.ly                 | 2025-03-22 02:49:39.980287
+ gsomerled2  | gsomerled2@auda.org.au          | 2025-03-21 02:49:39.980287
+ wedginton3  | wedginton3@google.com           | 2025-03-19 02:49:39.980287
+ dpuckring0  | dpuckring0@wikimedia.org        | 2025-03-18 02:49:39.980287
+ mshine4     | mshine4@army.mil                | 2025-03-17 02:49:39.980287
+ marnli5     | marnli5@google.co.uk            | 2025-03-15 02:49:39.980287
+ wjohnston6  | wjohnston6@omniture.com         | 2025-03-13 02:49:39.980287
+ shenstone7  | shenstone7@networksolutions.com | 2025-03-11 02:49:39.980287
+ chuffey8    | chuffey8@csmonitor.com          | 2025-03-09 02:49:39.980287
+ asandiland9 | asandiland9@sun.com             | 2025-03-07 02:49:39.980287
+(10 rows)
+```
