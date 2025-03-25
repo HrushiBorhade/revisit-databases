@@ -210,3 +210,29 @@ message_boards=# DELETE FROM users WHERE user_id = 999 RETURNING *;
 
 DELETE 1
 ```
+
+- Foreign Keys
+```
+CREATE TABLE users(
+  user_id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  username VARCHAR(25) UNIQUE NOT NULL, 
+  email VARCHAR(50) UNIQUE NOT NULL,
+  fullname VARCHAR(100) NOT NULL,
+  last_login TIMESTAMP,
+  created_on TIMESTAMP NOT NULL
+);
+
+CREATE TABLE boards(
+  board_id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  board_name VARCHAR(50) UNIQUE NOT NULL, 
+  board_description TEXT NOT NULL
+);
+
+CREATE TABLE comment(
+  comment_id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+  board_id INT REFERENCES boards(board_id) ON DELETE CASCADE,
+  comment TEXT NOT NULL,
+  time TIMESTAMP
+)
+```
