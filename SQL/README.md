@@ -35,3 +35,29 @@ You are now connected to database "message_boards" as user "postgres".
 -- run a shell command
 \! ls && echo "hi from shell!"
 ```
+
+- Create Table
+```
+message_boards=# CREATE TABLE users (
+  user_id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  username VARCHAR ( 25 ) UNIQUE NOT NULL,
+  email VARCHAR ( 50 ) UNIQUE NOT NULL,
+  full_name VARCHAR ( 100 ) NOT NULL,
+  last_login TIMESTAMP,
+  created_on TIMESTAMP NOT NULL
+);
+```
+
+- Insert into table 
+```
+message_boards=# INSERT INTO users(username, email, full_name, created_on) VALUES ('hrushiB', 'hrushi@gmail.com', 'hrushi borhade', NOW());
+```
+
+- Get Records
+```
+message_boards=# SELECT * FROM users;
+ user_id | username |      email       |   full_name    | last_login |         created_on
+---------+----------+------------------+----------------+------------+----------------------------
+       1 | hrushiB  | hrushi@gmail.com | hrushi borhade |            | 2025-03-25 02:38:00.358372
+(1 row)
+```
