@@ -282,7 +282,7 @@ NATURAL INNER JOIN
   users
 WHERE
   board_id = 39;
-  
+
 comment_id | user_id |   username   |        time         |       preview
 ------------+---------+--------------+---------------------+----------------------
         524 |      41 | klicciardo14 | 2018-07-09 15:36:28 | Lorem ipsum dolor si
@@ -301,4 +301,127 @@ comment_id | user_id |   username   |        time         |       preview
 
 (END)
 
+```
+
+- SubQueries
+```
+message_boards=# SELECT comment_id, user_id, LEFT(comment, 20) FROM comments WHERE user_id = (SELECT user_id FROM users WHERE full_name = 'Maynord Simonich');
+ comment_id | user_id |         left
+------------+---------+----------------------
+        208 |      40 | Nullam porttitor lac
+        275 |      40 | Sed sagittis. Nam co
+        624 |      40 | Integer ac leo. Pell
+        917 |      40 | Cras mi pede, malesu
+(4 rows)
+```
+
+- GroupBy
+```
+message_boards=# SELECT
+  boards.board_name, COUNT(*) AS comment_count
+FROM
+  comments
+INNER JOIN
+  boards
+ON
+  boards.board_id = comments.board_id
+GROUP BY
+  boards.board_name
+ORDER BY
+  comment_count DESC
+LIMIT 10;
+      board_name      | comment_count
+----------------------+---------------
+ Cloned               |            18
+ budgetary management |            18
+ open system          |            16
+ Universal            |            16
+ analyzer             |            15
+ puppies              |            15
+ Balanced             |            14
+ leverage             |            14
+ Seamless             |            14
+ Innovative           |            13
+(10 rows)
+
+message_boards=# SELECT
+  boards.board_name, COUNT(*) AS comment_count
+FROM
+  comments
+INNER JOIN
+  boards
+ON
+  boards.board_id = comments.board_id
+GROUP BY
+  boards.board_name
+ORDER BY
+  comment_count ASC
+LIMIT 10;
+   board_name    | comment_count
+-----------------+---------------
+ Diverse         |             4
+ neutral         |             5
+ heuristic       |             6
+ De-engineered   |             6
+ Polarised       |             6
+ cars            |             6
+ whiskey         |             6
+ Mandatory       |             6
+ functionalities |             6
+ beer            |             6
+(10 rows)
+
+message_boards=# SELECT
+  boards.board_name, COUNT(comment_id) AS comment_count
+FROM
+  comments
+RIGHT JOIN
+  boards
+ON
+  boards.board_id = comments.board_id
+GROUP BY
+  boards.board_name
+ORDER BY
+  comment_count;
+
+       board_name        | comment_count
+-------------------------+---------------
+ fire                    |             0
+ Diverse                 |             4
+ neutral                 |             5
+ Mandatory               |             6
+ responsive              |             6
+ functionalities         |             6
+ De-engineered           |             6
+ Polarised               |             6
+ cars                    |             6
+ beer                    |             6
+ whiskey                 |             6
+ heuristic               |             6
+ bi-directional          |             7
+ Exclusive               |             7
+ Function-based          |             7
+ impactful               |             7
+ dogs                    |             7
+ uniform                 |             8
+ Virtual                 |             8
+ dresses                 |             8
+ Upgradable              |             8
+ shoes                   |             8
+ birds                   |             8
+ dedicated               |             8
+ computers               |             8
+ travel                  |             8
+ multi-tasking           |             8
+ transitional            |             8
+ info-mediaries          |             8
+ success                 |             9
+ Persevering             |             9
+ Decentralized           |             9
+ methodical              |             9
+ Up-sized                |             9
+ protocol                |             9
+ Triple-buffered         |             9
+ Object-based            |             9
+:
 ```
