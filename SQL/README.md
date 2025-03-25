@@ -497,3 +497,44 @@ WHERE
  237    | 3301  |        485
 (3 rows)
 ```
+
+- Indexing
+  
+```
+message_boards=# EXPLAIN SELECT comment_id, user_id, time, LEFT(comment, 20) FROM comments WHERE board_id = 39 ORDER BY time DESC LIMIT 40;
+                              QUERY PLAN
+-----------------------------------------------------------------------
+ Limit  (cost=65.75..65.78 rows=12 width=48)
+   ->  Sort  (cost=65.75..65.78 rows=12 width=48)
+         Sort Key: "time" DESC
+         ->  Seq Scan on comments  (cost=0.00..65.53 rows=12 width=48)
+               Filter: (board_id = 39)
+(5 rows)
+```
+
+```
+message_boards=# CREATE INDEX ON comments(board_id);
+CREATE INDEX
+```
+
+```
+message_boards=# EXPLAIN SELECT comment_id, user_id, time, LEFT(comment, 20) FROM comments WHERE board_id = 39 ORDER BY time DESC LIMIT 40; -- run again
+                                           QUERY PLAN
+-------------------------------------------------------------------------------------------------
+ Limit  (cost=33.73..33.76 rows=12 width=48)
+   ->  Sort  (cost=33.73..33.76 rows=12 width=48)
+         Sort Key: "time" DESC
+         ->  Bitmap Heap Scan on comments  (cost=4.37..33.51 rows=12 width=48)
+               Recheck Cond: (board_id = 39)
+               ->  Bitmap Index Scan on comments_board_id_idx  (cost=0.00..4.37 rows=12 width=0)
+                     Index Cond: (board_id = 39)
+(7 rows)
+```
+
+```
+message_boards=# CREATE UNIQUE INDEX username_idx ON users (username);
+INSERT INTO users (username, email, full_name, created_on) VALUES ('aaizikovj', 'lol@example.com', 'Brian', NOW());
+CREATE INDEX
+ERROR:  duplicate key value violates unique constraint "users_username_key"
+DETAIL:  Key (username)=(aaizikovj) already exists.
+```
