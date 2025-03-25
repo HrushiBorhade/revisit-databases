@@ -236,3 +236,69 @@ CREATE TABLE comment(
   time TIMESTAMP
 )
 ```
+
+- JOINS
+```
+message_boards=# SELECT comment_id, user_id, LEFT(comment,20) AS preview FROM comments WHERE board_id=39;
+ comment_id | user_id |       preview
+------------+---------+----------------------
+         63 |     858 | Maecenas tristique,
+        358 |     876 | Mauris enim leo, rho
+        410 |     344 | Praesent blandit. Na
+        429 |     789 | Maecenas ut massa qu
+        463 |     925 | Phasellus sit amet e
+        485 |     112 | Maecenas tristique,
+        524 |      41 | Lorem ipsum dolor si
+        532 |     502 | In hac habitasse pla
+        540 |     588 | Nullam porttitor lac
+        545 |     587 | Praesent id massa id
+        551 |     620 | Morbi porttitor lore
+        972 |     998 | Aenean lectus. Pelle
+(12 rows)
+
+message_boards=# SELECT comment_id, comments.user_id, users.username, time, LEFT(comments,20) AS preview FROM comments INNER JOIN users ON comments.user_id = users.user_id WHERE comment_id | user_id |   username   |        time         |       preview
+------------+---------+--------------+---------------------+----------------------
+        524 |      41 | klicciardo14 | 2018-07-09 15:36:28 | Lorem ipsum dolor si
+        485 |     112 | erobrose33   | 2019-08-30 02:32:38 | Maecenas tristique,
+        410 |     344 | tposse9j     | 2018-10-07 19:02:52 | Praesent blandit. Na
+        532 |     502 | dbenndx      | 2019-07-06 04:08:15 | In hac habitasse pla
+        545 |     587 | rspitaroga   | 2019-11-03 22:48:08 | Praesent id massa id
+        540 |     588 | rrandlegb    | 2020-01-21 19:52:11 | Nullam porttitor lac
+        551 |     620 | bcarlawh7    | 2020-06-11 00:37:22 | Morbi porttitor lore
+        429 |     789 | mpelllw      | 2019-05-24 14:56:49 | Maecenas ut massa qu
+         63 |     858 | uvickarnt    | 2020-07-31 04:46:40 | Maecenas tristique,
+        358 |     876 | egeffenob    | 2020-06-20 02:28:58 | Mauris enim leo, rho
+        463 |     925 | hderrickpo   | 2018-01-02 14:48:49 | Phasellus sit amet e
+        972 |     998 | imcdowallrp  | 2018-03-15 00:23:38 | Aenean lectus. Pelle
+(12 rows)
+
+(END)
+
+message_boards=# SELECT
+  comment_id, comments.user_id, users.username, time, LEFT(comment, 20) AS preview
+FROM
+  comments
+NATURAL INNER JOIN
+  users
+WHERE
+  board_id = 39;
+  
+comment_id | user_id |   username   |        time         |       preview
+------------+---------+--------------+---------------------+----------------------
+        524 |      41 | klicciardo14 | 2018-07-09 15:36:28 | Lorem ipsum dolor si
+        485 |     112 | erobrose33   | 2019-08-30 02:32:38 | Maecenas tristique,
+        410 |     344 | tposse9j     | 2018-10-07 19:02:52 | Praesent blandit. Na
+        532 |     502 | dbenndx      | 2019-07-06 04:08:15 | In hac habitasse pla
+        545 |     587 | rspitaroga   | 2019-11-03 22:48:08 | Praesent id massa id
+        540 |     588 | rrandlegb    | 2020-01-21 19:52:11 | Nullam porttitor lac
+        551 |     620 | bcarlawh7    | 2020-06-11 00:37:22 | Morbi porttitor lore
+        429 |     789 | mpelllw      | 2019-05-24 14:56:49 | Maecenas ut massa qu
+         63 |     858 | uvickarnt    | 2020-07-31 04:46:40 | Maecenas tristique,
+        358 |     876 | egeffenob    | 2020-06-20 02:28:58 | Mauris enim leo, rho
+        463 |     925 | hderrickpo   | 2018-01-02 14:48:49 | Phasellus sit amet e
+        972 |     998 | imcdowallrp  | 2018-03-15 00:23:38 | Aenean lectus. Pelle
+(12 rows)
+
+(END)
+
+```
