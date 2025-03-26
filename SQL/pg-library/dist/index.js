@@ -42,46 +42,73 @@ const client = new pg_1.Client({
 //     `);
 //   console.log("result", result);
 // }
-function insertUserAndAddressData(userInfo, addressInfo) {
+// async function insertUserAndAddressData(
+//   userInfo: {
+//     username: string;
+//     email: string;
+//     password: string;
+//   },
+//   addressInfo: {
+//     city: string;
+//     country: string;
+//     street: string;
+//     pincode: string;
+//   }
+// ) {
+//   try {
+//     await client.connect();
+//     await client.query(`BEGIN`);
+//     const userRes = await client.query(
+//       `
+//         INSERT INTO users(username, email, password) VALUES ($1, $2, $3) RETURNING id;
+//     `,
+//       [userInfo.username, userInfo.email, userInfo.password]
+//     );
+//     console.log("userRes", userRes);
+//     const userId = userRes.rows[0].id;
+//     if (!userId) throw new Error("user data insertion failed!");
+//     const addressRes = await client.query(
+//       `
+//         INSERT INTO addresses (user_id, city, country, street, pincode) VALUES($1, $2, $3, $4, $5) RETURNING id;
+//       `,
+//       [
+//         userId,
+//         addressInfo.city,
+//         addressInfo.country,
+//         addressInfo.street,
+//         addressInfo.pincode,
+//       ]
+//     );
+//     console.log("addressRes", addressRes);
+//     if (addressRes.rows.length < 1)
+//       throw new Error("Address data insertion failed");
+//     await client.query("COMMIT");
+//     console.log(
+//       "Transaction Completed ✅: User and Address inserted successfully"
+//     );
+//   } catch (e) {
+//     console.error("Transaction Failed: Something went wrong ❌ ", e);
+//   }
+// }
+function getUserAndAddress(username) {
     return __awaiter(this, void 0, void 0, function* () {
-        try {
-            yield client.connect();
-            yield client.query(`BEGIN`);
-            const userRes = yield client.query(`
-        INSERT INTO users(username, email, password) VALUES ($1, $2, $3) RETURNING id;
-    `, [userInfo.username, userInfo.email, userInfo.password]);
-            console.log("userRes", userRes);
-            const userId = userRes.rows[0].id;
-            if (!userId)
-                throw new Error("user data insertion failed!");
-            const addressRes = yield client.query(`
-        INSERT INTO addresses (user_id, city, country, street, pincode) VALUES($1, $2, $3, $4, $5) RETURNING id;
-      `, [
-                userId,
-                addressInfo.city,
-                addressInfo.country,
-                addressInfo.street,
-                addressInfo.pincode,
-            ]);
-            console.log("addressRes", addressRes);
-            if (addressRes.rows.length < 1)
-                throw new Error("Address data insertion failed");
-            yield client.query("COMMIT");
-            console.log("Transaction Completed ✅: User and Address inserted successfully");
-        }
-        catch (e) {
-            console.error("Transaction Failed: Something went wrong ❌ ", e);
-        }
+        yield client.connect();
+        const res = yield client.query(`SELECT username,email, a.street , a.city, a.country, a.pincode FROM users JOIN addresses AS a ON users.id = a.user_id WHERE username=$1;`, [username]);
+        console.log("res", res);
     });
 }
 // createUsersAndAddressesTable();
-insertUserAndAddressData({
-    username: "hrushi",
-    email: "hrushi@gmail.com",
-    password: "randompassword",
-}, {
-    city: "Pune",
-    country: "India",
-    street: "New street",
-    pincode: "123456",
-});
+// insertUserAndAddressData(
+//   {
+//     username: "hrushi",
+//     email: "hrushi@gmail.com",
+//     password: "randompassword",
+//   },
+//   {
+//     city: "Pune",
+//     country: "India",
+//     street: "New street",
+//     pincode: "123456",
+//   }
+// );
+getUserAndAddress("hrushi");
